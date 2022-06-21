@@ -12,7 +12,7 @@ def button_click(event):#ボタンが押されたときの処理
         res = eval(ans)
         entry.delete(0,tk.END)
         entry.insert(tk.END,res)
-    elif num == "AC":#オールデリート
+    elif num == "AC":#オールクリア/現在の計算式を全消しする
         entry.delete(0,tk.END)
     else:#計算式作成
         entry.insert(tk.END,num)
