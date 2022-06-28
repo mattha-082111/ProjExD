@@ -44,10 +44,10 @@ if __name__ == "__main__":
     cx,cy = 100*mx+50,100*my+50
     canvas.create_image(cx,cy,image=tori,tag="tori")
 
-    goal = Tk.PhotoImage(file = "fig/goal_tape.png")                #ゴールを設定
+    goal = Tk.PhotoImage(file = "fig/goal_tape.png")         #ゴールを設定
     canvas.create_image(1350,750,image=goal,tag="goal")
 
-    Start = Tk.PhotoImage(file = "fig/text_start.png")                #ゴールを設定
+    Start = Tk.PhotoImage(file = "fig/text_start.png")       #スタートを設定
     canvas.create_image(cx,cy,image=Start,tag="Start")
 
 
