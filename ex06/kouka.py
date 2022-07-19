@@ -104,6 +104,9 @@ def main(): # main関数
     bkd7 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
     bkd8 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
     bkd9 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
+    hoge = pg.mixer.Sound("sound/mp3_BGM.mp3")  #ゲームプレイ中常にBGMが流れるようにする
+    hoge.play()
+
 
     beam = None
 
@@ -123,41 +126,77 @@ def main(): # main関数
             beam.update(scr)
             #ビームを爆弾に当てたときbombsのパラメータを0にする
             if bkd1.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[0] = 0
             if bkd2.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[1] = 0
             if bkd3.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[2] = 0
             if bkd4.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[3] = 0
             if bkd5.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[4] = 0
             if bkd6.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[5] = 0
             if bkd7.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[6] = 0
             if bkd8.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[7] = 0
             if bkd9.rct.colliderect(beam.rct):
+                hit = pg.mixer.Sound("sound/爆発2.mp3")
+                hit.play()
                 bombs[8] = 0
         #こうかとんが爆弾に当たった時、ゲームを強制終了する
         if kkt.rct.colliderect(bkd1.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd2.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd3.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd4.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd5.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd6.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd7.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd8.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         if kkt.rct.colliderect(bkd9.rct):
+            hit2 = pg.mixer.Sound("sound/爆発2.mp3")
+            hit2.play()
             return
         
         kkt.update(scr)
