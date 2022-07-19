@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import random
+import tkinter as tk
 
 
 class Screen: # 画面表示クラス
@@ -90,9 +91,13 @@ class Shot: # ビームに関するクラス
             del self
 
 def main(): # main関数
+    global counter,cnt
     clock = pg.time.Clock()
     scr = Screen("fighting!こうかとん", (1600, 900), "fig/pg_bg.jpg")
-    kkt = Bird("fig/6.png", 2.0, (900, 400))
+    kkt = Bird(f"fig/{cnt}.png", 2.0, (900, 400))
+    bgn = int(pg.time.get_ticks())
+    clock = pg.time.Clock()
+    fonto = pg.font.Font("C:\WINDOWS\FONTS\BIZ-UDMINCHOM.TTC", 80)
     
     # 9つの爆弾を表示(この下以降が担当箇所)
     bkd1 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
@@ -111,6 +116,12 @@ def main(): # main関数
 
     while True:
         scr.blit()
+
+        sec = int(100-(pg.time.get_ticks()-bgn)/1000)           #秒数の計算
+        if sec == 0:
+                clear()
+        txt = fonto.render(f"制限時間{sec}", True, (255,0,0))   #こうかとんの画像変更
+        scr.sfc.blit(txt, (200, 100))    
 
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -188,6 +199,46 @@ def main(): # main関数
         pg.display.update()
         clock.tick(1000)
 
+def Continue():
+    global root
+    root = tk.Tk()                                                              #gameover画面(y/n)yの場合コンティニュー、nの場合ゲームを終了
+    root.geometry("220x100")
+    root.title("GameOver")
+    label = tk.Label(root, text="continue?", font = ("Times New Roman", 40))
+    label.place(y = 90)
+    label.pack()
+    btn1 = tk.Button(root, text = "Yes", command = reset)
+    btn1.place(x = 63, y = 60)
+    btn2 = tk.Button(root, text = "No", command = exit)
+    btn2.place(x = 126, y = 60)
+    root.mainloop()
+
+def clear():                                                                            #ゲームクリアしたときの処理
+    global root
+    root = tk.Tk()
+    root.geometry("400x110")
+    root.title("ゲームクリア！")
+    label = tk.Label(root, text="Congratulations!", font = ("Times New Roman", 40))
+    label.place(y = 90)
+    label.pack()
+    btn = tk.Button(root, text = "おめでとう！", command = exit)
+    btn.place(x = 150, y = 65)
+    root.mainloop()
+
+def reset():     #鳥のカウントとゲームオーバー画面の非表示　こうかとんの位置リセット　画像チェンジ
+    global root,cnt
+    cnt += 1
+    if cnt == 9:
+        cnt = 0
+    root.destroy()
+    pg.init()
+    main()
+
+
+def exit():     #終了
+    pg.quit()
+    sys.exit()
+
 def check_bound(rct, scr_rct):
     '''
     [1] rct: こうかとん or 爆弾のRect
@@ -200,7 +251,10 @@ def check_bound(rct, scr_rct):
 
 
 if __name__ == "__main__":
+    cnt = 0
+    fcnt = 0
+    tmr = 100
     pg.init()
     main()
-    pg.quit()
-    sys.exit()
+    while True:
+        Continue()
