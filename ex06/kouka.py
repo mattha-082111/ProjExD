@@ -15,6 +15,21 @@ class Screen: # 画面表示クラス
     def blit(self):
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
+class Zanki:
+    def __init__(self, image:str,size: float, vxy):
+        self.sfc = pg.image.load(image) 
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, size)
+        self.rct = self.sfc.get_rect() # Rect
+        self.vx, self.vy = vxy
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+    def update(self, scr: Screen):
+        
+        # 練習7
+         
+        # 練習5
+        self.blit(scr)
+
 
 class Bird: # こうかとんに関するクラス
     def __init__(self, image: str, size: float, xy):
@@ -117,6 +132,9 @@ def main(): # main関数
 
     bombs = [1,1,1,1,1,1,1,1,1]
 
+    hoge = pg.mixer.Sound("ex06/mp3/mp3_BGM.mp3")
+    hoge.play()
+
     while True:
         scr.blit()
 
@@ -128,9 +146,13 @@ def main(): # main関数
 
         for event in pg.event.get():
             if event.type == pg.QUIT: 
+                hit_music = pg.mixer.Sound("ex06/mp3/hit.mp3")
+                hit_music.play()
                 return
             if (event.type == pg.KEYDOWN) and (event.key == pg.K_SPACE):
                 beam = kkt.attack()                                    #スペースキーでこうかとんが攻撃
+                beam_music = pg.mixer.Sound("ex06/mp3/mp3_006.wav")
+                beam_music.play()
 
 
         if beam:
