@@ -132,8 +132,14 @@ def main(): # main関数
 
     bombs = [1,1,1,1,1,1,1,1,1]
 
+
+    #bgm追加
+    bgm = pg.mixer.Sound("fig/Dear_Sir_Einstein.mp3")
+    bgm.play()
+    
     hoge = pg.mixer.Sound("ex06/mp3/mp3_BGM.mp3")
     hoge.play()
+
 
     while True:
         scr.blit()
@@ -236,22 +242,40 @@ def main(): # main関数
         #ビームを爆弾に当てた時に更新をしないようにする処理
         if bombs[0] != 0:
             bkd1.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()   
         if bombs[1] != 0:
             bkd2.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()   
         if bombs[2] != 0:
             bkd3.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[3] != 0:
             bkd4.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[4] != 0:
             bkd5.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[5] != 0:
             bkd6.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[6] != 0:
             bkd7.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[7] != 0:
             bkd8.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         if bombs[8] != 0:
             bkd9.update(scr)
+            hoge = pg.mixer.Sound("fig/爆発4.mp3")
+            hoge.play()
         
         #爆弾のパラメータの合計値が0のときゲームを終了する
         if sum(bombs) == 0:
