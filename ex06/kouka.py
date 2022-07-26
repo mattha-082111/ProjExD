@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
-import random
+import random as ra
+import tkinter as tk
 
 
 class Screen: # 画面表示クラス
@@ -13,6 +14,19 @@ class Screen: # 画面表示クラス
 
     def blit(self):
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
+
+class Zanki:
+    def __init__(self, image:str,size: float, vxy):
+        self.sfc = pg.image.load(image) 
+        self.sfc = pg.transform.rotozoom(self.sfc, 0, size)
+        self.rct = self.sfc.get_rect() # Rect
+        self.vx, self.vy = vxy
+
+    def blit(self, scr: Screen):
+        scr.sfc.blit(self.sfc, self.rct)
+
+    def update(self, scr: Screen):
+        self.blit(scr)
 
 
 class Bird: # こうかとんに関するクラス
@@ -57,8 +71,8 @@ class Bomb: #爆弾に関するクラス
         self.sfc.set_colorkey((0, 0, 0)) 
         pg.draw.circle(self.sfc, color, (size, size), size)
         self.rct = self.sfc.get_rect()                      # Rect
-        self.rct.centerx = random.randint(0, scr.rct.width)
-        self.rct.centery = random.randint(0, scr.rct.height)
+        self.rct.centerx = ra.randint(0, scr.rct.width)
+        self.rct.centery = ra.randint(0, scr.rct.height)
         self.vx, self.vy = vxy 
 
     def blit(self, scr: Screen):
@@ -90,105 +104,127 @@ class Shot: # ビームに関するクラス
             del self
 
 def main(): # main関数
+    global counter,cnt,hoge,bomb_count,speed
     clock = pg.time.Clock()
-    scr = Screen("fighting!こうかとん", (1600, 900), "fig/pg_bg.jpg")
-    kkt = Bird("fig/6.png", 2.0, (900, 400))
+    scr = Screen("fighting!こうかとん", (1400, 700), "fig/pg_bg.jpg")
+    kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 200))
+    bgn = int(pg.time.get_ticks())
+    clock = pg.time.Clock()
+    fonto = pg.font.Font("C:\WINDOWS\FONTS\BIZ-UDMINCHOM.TTC", 80)
     
-    # 9つの爆弾を表示(この下以降が担当箇所)
-    bkd1 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd2 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd3 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd4 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd5 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd6 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd7 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd8 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
-    bkd9 = Bomb((random.randint(0,255),(random.randint(0,255)),(random.randint(0,255))), 10, (+1,+1), scr)
+    bomb_count = ra.randrange(5,15)
+    speed = ra.randrange(1,2)
+    bombs = [0 for c in range(bomb_count)]
+    
+    # 爆弾を表示(この下以降が担当箇所)
+    for i in range(bomb_count):
+        bombs[i] = Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr)
+    
+    if bomb_count < 7:
+        pg.mixer.music.load("fig/mp3_BGM.mp3")  #ゲームプレイ中常にBGMが流れるようにする
+        pg.mixer.music.play(2)
+    else:
+        pg.mixer.music.load("fig/Dear_Sir_Einstein.mp3")  #ゲームプレイ中常にBGMが流れるようにする
+        pg.mixer.music.play(2)
 
     beam = None
 
-    bombs = [1,1,1,1,1,1,1,1,1]
+    bombs_flag = [1 for d in range(bomb_count)]
+
 
     while True:
         scr.blit()
 
+        sec = int(15-(pg.time.get_ticks()-bgn)/1000)           #秒数の計算
+        if sec == 0:
+            Continue()
+        txt = fonto.render(f"制限時間{sec}", True, (255,0,0))   #こうかとんの画像変更
+        scr.sfc.blit(txt, (200, 100))    
+
         for event in pg.event.get():
             if event.type == pg.QUIT: 
+                hit_music = pg.mixer.Sound("fig/hit.mp3")
+                hit_music.play()
                 return
+                
             if (event.type == pg.KEYDOWN) and (event.key == pg.K_SPACE):
-                beam = kkt.attack()
+                beam = kkt.attack()                                    #スペースキーでこうかとんが攻撃
                 beam_music = pg.mixer.Sound("fig/mp3_006.wav")
-                beam_music.play()                                     #スペースキーでこうかとんが攻撃
+                beam_music.play()
 
 
         if beam:
             beam.update(scr)
             #ビームを爆弾に当てたときbombsのパラメータを0にする
-            if bkd1.rct.colliderect(beam.rct):
-                bombs[0] = 0
-            if bkd2.rct.colliderect(beam.rct):
-                bombs[1] = 0
-            if bkd3.rct.colliderect(beam.rct):
-                bombs[2] = 0
-            if bkd4.rct.colliderect(beam.rct):
-                bombs[3] = 0
-            if bkd5.rct.colliderect(beam.rct):
-                bombs[4] = 0
-            if bkd6.rct.colliderect(beam.rct):
-                bombs[5] = 0
-            if bkd7.rct.colliderect(beam.rct):
-                bombs[6] = 0
-            if bkd8.rct.colliderect(beam.rct):
-                bombs[7] = 0
-            if bkd9.rct.colliderect(beam.rct):
-                bombs[8] = 0
+            for g in range(bomb_count):
+                if bombs[g].rct.colliderect(beam.rct):
+                    hit = pg.mixer.Sound("fig/爆発2.mp3")
+                    hit.play()
+                    bombs_flag[g] = 0
+            
         #こうかとんが爆弾に当たった時、ゲームを強制終了する
-        if kkt.rct.colliderect(bkd1.rct):
-            return
-        if kkt.rct.colliderect(bkd2.rct):
-            return
-        if kkt.rct.colliderect(bkd3.rct): 
-            return
-        if kkt.rct.colliderect(bkd4.rct):
-            return
-        if kkt.rct.colliderect(bkd5.rct):
-            return
-        if kkt.rct.colliderect(bkd6.rct):
-            return
-        if kkt.rct.colliderect(bkd7.rct):
-            return
-        if kkt.rct.colliderect(bkd8.rct):
-            return
-        if kkt.rct.colliderect(bkd9.rct):
-            return
-        
+        for k in range(bomb_count):
+            if kkt.rct.colliderect(bombs[k].rct):
+                hit2 = pg.mixer.Sound("fig/爆発2.mp3")
+                hit2.play()
+                pg.mixer.music.load("fig/deathse.mp3")
+                pg.mixer.music.play(1)
+                Continue() 
         kkt.update(scr)
-        #ビームを爆弾に当てた時に更新をしないようにする処理
-        if bombs[0] != 0:
-            bkd1.update(scr)
-        if bombs[1] != 0:
-            bkd2.update(scr)
-        if bombs[2] != 0:
-            bkd3.update(scr)
-        if bombs[3] != 0:
-            bkd4.update(scr)
-        if bombs[4] != 0:
-            bkd5.update(scr)
-        if bombs[5] != 0:
-            bkd6.update(scr)
-        if bombs[6] != 0:
-            bkd7.update(scr)
-        if bombs[7] != 0:
-            bkd8.update(scr)
-        if bombs[8] != 0:
-            bkd9.update(scr)
+
+        # #ビームを爆弾に当てた時に更新をしないようにする処理
+        for e in range(bomb_count):
+            if bombs_flag[e] != 0:
+                bombs[e].update(scr)
         
         #爆弾のパラメータの合計値が0のときゲームを終了する
-        if sum(bombs) == 0:
-            return
+        if sum(bombs_flag) == 0:
+            pg.mixer.music.load("fig/victory.mp3")
+            pg.mixer.music.play(1)
+            clear()
             
         pg.display.update()
         clock.tick(1000)
+
+def Continue():
+    global root
+    root = tk.Tk()                                                              #gameover画面(y/n)yの場合コンティニュー、nの場合ゲームを終了
+    root.geometry("220x100")
+    root.title("GameOver")
+    label = tk.Label(root, text="continue?", font = ("Times New Roman", 40))
+    label.place(y = 90)
+    label.pack()
+    btn1 = tk.Button(root, text = "Yes", command = reset)
+    btn1.place(x = 63, y = 60)
+    btn2 = tk.Button(root, text = "No", command = exit)
+    btn2.place(x = 126, y = 60)
+    root.mainloop()
+
+def clear():                                                                            #ゲームクリアしたときの処理
+    global root
+    root = tk.Tk()
+    root.geometry("400x110")
+    root.title("ゲームクリア！")
+    label = tk.Label(root, text="Congratulations!", font = ("Times New Roman", 40))
+    label.place(y = 90)
+    label.pack()
+    btn = tk.Button(root, text = "おめでとう！", command = exit)
+    btn.place(x = 150, y = 65)
+    root.mainloop()
+
+def reset():     #鳥のカウントとゲームオーバー画面の非表示　こうかとんの位置リセット　画像チェンジ
+    global root,cnt
+    cnt += 1
+    if cnt == 9:
+        cnt = 0
+    root.destroy()
+    pg.init()
+    main()
+
+
+def exit():     #終了
+    pg.quit()
+    sys.exit()
 
 def check_bound(rct, scr_rct):
     '''
@@ -202,7 +238,9 @@ def check_bound(rct, scr_rct):
 
 
 if __name__ == "__main__":
+    cnt = 0
+    fcnt = 0
     pg.init()
     main()
-    pg.quit()
-    sys.exit()
+    while True:
+        Continue()
