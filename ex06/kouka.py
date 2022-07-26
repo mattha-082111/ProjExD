@@ -116,15 +116,15 @@ def main(): # main関数
     speed = ra.randrange(1,2)
     bombs = [0 for c in range(bomb_count)]
     
-    # 爆弾を表示(この下以降が担当箇所)
+    # 爆弾を表示
     for i in range(bomb_count):
         bombs[i] = Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr)
     
     if bomb_count < 7:
-        pg.mixer.music.load("fig/mp3_BGM.mp3")  #ゲームプレイ中常にBGMが流れるようにする
+        pg.mixer.music.load("fig/mp3_BGM.mp3")  #ゲームプレイ中常にBGMが流れるようにする(爆弾が七個以下のとき)
         pg.mixer.music.play(2)
     else:
-        pg.mixer.music.load("fig/Dear_Sir_Einstein.mp3")  #ゲームプレイ中常にBGMが流れるようにする
+        pg.mixer.music.load("fig/Dear_Sir_Einstein.mp3")  #ゲームプレイ中常にBGMが流れるようにする(爆弾が八個以上のとき)
         pg.mixer.music.play(2)
 
     beam = None
@@ -135,7 +135,7 @@ def main(): # main関数
     while True:
         scr.blit()
 
-        sec = int(15-(pg.time.get_ticks()-bgn)/1000)           #秒数の計算
+        sec = int(10-(pg.time.get_ticks()-bgn)/1000)           #秒数の計算
         if sec == 0:
             Continue()
         txt = fonto.render(f"制限時間{sec}", True, (255,0,0))   #こうかとんの画像変更
@@ -148,14 +148,14 @@ def main(): # main関数
                 return
                 
             if (event.type == pg.KEYDOWN) and (event.key == pg.K_SPACE):
-                beam = kkt.attack()                                    #スペースキーでこうかとんが攻撃
+                beam = kkt.attack()                                    #スペースキーでこうかとんがビームを発射する
                 beam_music = pg.mixer.Sound("fig/mp3_006.wav")
                 beam_music.play()
 
 
         if beam:
             beam.update(scr)
-            #ビームを爆弾に当てたときbombsのパラメータを0にする
+            #ビームを爆弾に当てたときbombs_flagのパラメータを0にする
             for g in range(bomb_count):
                 if bombs[g].rct.colliderect(beam.rct):
                     hit = pg.mixer.Sound("fig/爆発2.mp3")
