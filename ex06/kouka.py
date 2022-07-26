@@ -104,16 +104,16 @@ class Shot: # ビームに関するクラス
             del self
 
 '''
-制作した機能/担当者
-爆弾を複数個にする(ランダムで５個から２５個爆弾が出現)/吉村
-ランダムで爆弾の色が変化する/岩田
-こうかとんがビームを出せるようになる/吉村
-爆弾にビームを当てたら爆弾が消える/吉村
-ゲームオーバー・ゲームクリアになるとゲームを終了させる/岩田
-BGM・SEを流れるようにする/松木・田畑・山本
-制限時間設定/岩田
-こうかとんの画像切り替え/岩田
-爆弾のサイズをランダムで設定/吉村
+制作した機能 / 担当者
+爆弾を複数個にする(ランダムで５個から２５個爆弾が出現) / 吉村
+ランダムで爆弾の色が変化する / 岩田
+こうかとんがビームを出せるようになる / 吉村
+爆弾にビームを当てたら爆弾が消える / 吉村
+ゲームオーバー・ゲームクリアになるとゲームを終了させる / 岩田
+BGM・SEを流れるようにする / 松木・田畑・山本
+制限時間設定 / 岩田
+こうかとんの画像切り替え / 岩田
+爆弾のサイズをランダムで設定 / 吉村
 '''
 def main(): # main関数
     global counter,cnt,hoge,bomb_count,speed
@@ -129,8 +129,7 @@ def main(): # main関数
     bombs = [0 for c in range(bomb_count)]
     
     # 爆弾を表示
-    for i in range(bomb_count):
-        bombs[i] = Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr)
+    bombs = [Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr) for i in range(bomb_count)]
     
     if bomb_count <= 7:
         pg.mixer.music.load("fig/mp3_BGM.mp3")                      #ゲームプレイ中常に楽しげなBGMが流れるようにする(爆弾が七個以下のとき)
