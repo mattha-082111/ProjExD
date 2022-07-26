@@ -154,7 +154,7 @@ def main(): # main関数
         if sec == 0:#制限時間が0のときゲームオーバー
             pg.mixer.music.load("fig/deathse.mp3")
             pg.mixer.music.play(1)
-            Continue()
+            continue_game()
         txt = fonto.render(f"制限時間{sec}", True, (255,0,0))         #こうかとんの画像変更
         scr.sfc.blit(txt, (200, 100))    
 
@@ -185,7 +185,7 @@ def main(): # main関数
                 hit2.play()
                 pg.mixer.music.load("fig/deathse.mp3")
                 pg.mixer.music.play(1)
-                Continue() 
+                continue_game() 
         kkt.update(scr)
 
         # #ビームを爆弾に当てた時に更新をしないようにする処理
@@ -202,7 +202,7 @@ def main(): # main関数
         pg.display.update()
         clock.tick(1000)
 
-def Continue():#gameover画面(y/n) yの場合コンティニュー、nの場合ゲームを終了
+def continue_game():#gameover画面(y/n) yの場合コンティニュー、nの場合ゲームを終了
     global root
     root = tk.Tk()
     root.geometry("220x100")
@@ -254,4 +254,4 @@ if __name__ == "__main__":
     pg.init()
     main()
     while True:
-        Continue()
+        continue_game()
