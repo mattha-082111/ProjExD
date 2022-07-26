@@ -104,19 +104,20 @@ class Shot: # ビームに関するクラス
             del self
 
 '''
-制作した機能/担当者
-爆弾を複数個にする(ランダムで５個から２５個爆弾が出現)/吉村
-ランダムで爆弾の色が変化する/岩田
-こうかとんがビームを出せるようになる/吉村
-爆弾にビームを当てたら爆弾が消える/吉村
-ゲームオーバー・ゲームクリアになるとゲームを終了させる/岩田
-BGM・SEを流れるようにする/松木・田畑・山本
-制限時間設定/岩田
-こうかとんの画像切り替え/岩田
-爆弾のサイズをランダムで設定/吉村
+制作した機能 / 担当者
+爆弾を複数個にする(ランダムで５個から２５個爆弾が出現) / 吉村
+ランダムで爆弾の色が変化する / 岩田
+こうかとんがビームを出せるようになる / 吉村
+爆弾にビームを当てたら爆弾が消える / 吉村
+ゲームオーバー・ゲームクリアになるとゲームを終了させる / 岩田
+BGM・SEを流れるようにする / 松木・田畑・山本
+制限時間設定 / 岩田
+こうかとんの画像切り替え / 岩田
+爆弾のサイズをランダムで設定 / 吉村
 '''
 def main(): # main関数
     global counter,cnt,hoge,BOMB_COUNT,SPEED
+
     clock = pg.time.Clock()
     scr = Screen("fighting!こうかとん", (1400, 700), "fig/pg_bg.jpg")
     kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 500))
@@ -129,10 +130,8 @@ def main(): # main関数
     bombs = [0 for c in range(BOMB_COUNT)]
     
     # 爆弾を表示
-    for i in range(BOMB_COUNT):
-        bombs[i] = Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))),
-                         ra.randint(10,25), 
-                         (+(SPEED),+(SPEED)), scr)
+    bombs = [Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), 
+            ra.randint(10,25), (+(SPEED),+(SPEED)), scr) for i in range(BOMB_COUNT)]
     
     if BOMB_COUNT <= 7:
         pg.mixer.music.load("fig/mp3_BGM.mp3")                      #ゲームプレイ中常に楽しげなBGMが流れるようにする(爆弾が七個以下のとき)
@@ -153,7 +152,7 @@ def main(): # main関数
         if sec == 0:#制限時間が0のときゲームオーバー
             pg.mixer.music.load("fig/deathse.mp3")
             pg.mixer.music.play(1)
-            Continue()
+            continue_game()
         txt = fonto.render(f"制限時間{sec}", True, (255,0,0))         #こうかとんの画像変更
         scr.sfc.blit(txt, (200, 100))    
 
@@ -184,7 +183,7 @@ def main(): # main関数
                 hit2.play()
                 pg.mixer.music.load("fig/deathse.mp3")
                 pg.mixer.music.play(1)
-                Continue() 
+                continue_game() 
         kkt.update(scr)
 
         # #ビームを爆弾に当てた時に更新をしないようにする処理
@@ -201,7 +200,7 @@ def main(): # main関数
         pg.display.update()
         clock.tick(1000)
 
-def Continue():#gameover画面(y/n) yの場合コンティニュー、nの場合ゲームを終了
+def continue_game():#gameover画面(y/n) yの場合コンティニュー、nの場合ゲームを終了
     global root
     root = tk.Tk()
     root.geometry("220x100")
@@ -253,4 +252,4 @@ if __name__ == "__main__":
     pg.init()
     main()
     while True:
-        Continue()
+        continue_game()
