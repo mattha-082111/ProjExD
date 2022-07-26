@@ -103,6 +103,18 @@ class Shot: # ビームに関するクラス
         if check_bound(self.rct, scr.rct) != (1,1):
             del self
 
+'''
+制作した機能/担当者
+爆弾を複数個にする(ランダムで５個から２５個爆弾が出現)/吉村
+ランダムで爆弾の色が変化する/岩田
+こうかとんがビームを出せるようになる/吉村
+爆弾にビームを当てたら爆弾が消える/吉村
+ゲームオーバー・ゲームクリアになるとゲームを終了させる/岩田
+BGM・SEを流れるようにする/松木・田畑・山本
+制限時間設定/岩田
+こうかとんの画像切り替え/岩田
+爆弾のサイズをランダムで設定/吉村
+'''
 def main(): # main関数
     global counter,cnt,hoge,bomb_count,speed
     clock = pg.time.Clock()
@@ -153,7 +165,6 @@ def main(): # main関数
                 beam = kkt.attack()                                    
                 beam_music = pg.mixer.Sound("fig/mp3_006.wav")#
                 beam_music.play()
-
 
         if beam:
             beam.update(scr)
@@ -227,11 +238,7 @@ def exit():#終了
     pg.quit()
     sys.exit()
 
-def check_bound(rct, scr_rct):
-    '''
-    [1] rct: こうかとん or 爆弾のRect
-    [2] scr_rct: スクリーンのRect
-    '''
+def check_bound(rct, scr_rct):#[1] rct: こうかとん or 爆弾のRect    [2] scr_rct: スクリーンのRect
     yoko, tate = +1, +1 # 領域内
     if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1 # 領域外
     if rct.top  < scr_rct.top  or scr_rct.bottom < rct.bottom: tate = -1 # 領域外
