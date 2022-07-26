@@ -116,7 +116,9 @@ def main(): # main関数
             if event.type == pg.QUIT: 
                 return
             if (event.type == pg.KEYDOWN) and (event.key == pg.K_SPACE):
-                beam = kkt.attack()                                    #スペースキーでこうかとんが攻撃
+                beam = kkt.attack()
+                beam_music = pg.mixer.Sound("fig/mp3_006.wav")
+                beam_music.play()                                     #スペースキーでこうかとんが攻撃
 
 
         if beam:
@@ -145,7 +147,7 @@ def main(): # main関数
             return
         if kkt.rct.colliderect(bkd2.rct):
             return
-        if kkt.rct.colliderect(bkd3.rct):
+        if kkt.rct.colliderect(bkd3.rct): 
             return
         if kkt.rct.colliderect(bkd4.rct):
             return
