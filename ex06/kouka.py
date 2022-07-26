@@ -116,7 +116,7 @@ BGM・SEを流れるようにする / 松木・田畑・山本
 爆弾のサイズをランダムで設定 / 吉村
 '''
 def main(): # main関数
-    global counter,cnt,hoge,bomb_count,speed
+    global counter,cnt,hoge,BOMB_COUNT,SPEED
     clock = pg.time.Clock()
     scr = Screen("fighting!こうかとん", (1400, 700), "fig/pg_bg.jpg")
     kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 500))
@@ -124,14 +124,15 @@ def main(): # main関数
     clock = pg.time.Clock()
     fonto = pg.font.Font("C:\WINDOWS\FONTS\BIZ-UDMINCHOM.TTC", 80)
     
-    bomb_count = ra.randrange(5,15)
-    speed = ra.randrange(1,2)
-    bombs = [0 for c in range(bomb_count)]
+    BOMB_COUNT = ra.randrange(5,15)
+    SPEED = ra.randrange(1,2)
+    bombs = [0 for c in range(BOMB_COUNT)]
     
     # 爆弾を表示
-    bombs = [Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr) for i in range(bomb_count)]
+    bombs = [Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), 
+            ra.randint(10,25), (+(SPEED),+(SPEED)), scr) for i in range(BOMB_COUNT)]
     
-    if bomb_count <= 7:
+    if BOMB_COUNT <= 7:
         pg.mixer.music.load("fig/mp3_BGM.mp3")                      #ゲームプレイ中常に楽しげなBGMが流れるようにする(爆弾が七個以下のとき)
         pg.mixer.music.play(2)
     else:
@@ -140,7 +141,7 @@ def main(): # main関数
 
     beam = None
 
-    bombs_flag = [1 for d in range(bomb_count)]
+    bombs_flag = [1 for d in range(BOMB_COUNT)]
 
 
     while True:
@@ -168,14 +169,14 @@ def main(): # main関数
         if beam:
             beam.update(scr)
             #ビームを爆弾に当てたときbombs_flagのパラメータを0にする
-            for g in range(bomb_count):
+            for g in range(BOMB_COUNT):
                 if bombs[g].rct.colliderect(beam.rct):
                     hit = pg.mixer.Sound("fig/爆発2.mp3")
                     hit.play()
                     bombs_flag[g] = 0
             
         #こうかとんが爆弾に当たった時、ゲームを強制終了する
-        for k in range(bomb_count):
+        for k in range(BOMB_COUNT):
             if kkt.rct.colliderect(bombs[k].rct):
                 hit2 = pg.mixer.Sound("fig/爆発2.mp3")
                 hit2.play()
@@ -185,7 +186,7 @@ def main(): # main関数
         kkt.update(scr)
 
         # #ビームを爆弾に当てた時に更新をしないようにする処理
-        for e in range(bomb_count):
+        for e in range(BOMB_COUNT):
             if bombs_flag[e] != 0:
                 bombs[e].update(scr)
         
