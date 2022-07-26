@@ -116,7 +116,7 @@ BGM・SEを流れるようにする / 松木・田畑・山本
 爆弾のサイズをランダムで設定 / 吉村
 '''
 def main(): # main関数
-    global counter,cnt,hoge,bomb_count,speed
+    global counter,cnt,hoge,bomb_count,speed,bb,size
     clock = pg.time.Clock()
     scr = Screen("fighting!こうかとん", (1400, 700), "fig/pg_bg.jpg")
     kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 500))
@@ -127,9 +127,10 @@ def main(): # main関数
     bomb_count = ra.randrange(5,15)
     speed = ra.randrange(1,2)
     bombs = [0 for c in range(bomb_count)]
-    
+    bb = ra.randint(0,255)
+    size = ra.randint(10,25)
     # 爆弾を表示
-    bombs = [Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr) for i in range(bomb_count)]
+    bombs = [Bomb((bb,bb,bb), size, (+(speed),+(speed)), scr) for i in range(bomb_count)]
     
     if bomb_count <= 7:
         pg.mixer.music.load("fig/mp3_BGM.mp3")                      #ゲームプレイ中常に楽しげなBGMが流れるようにする(爆弾が七個以下のとき)
