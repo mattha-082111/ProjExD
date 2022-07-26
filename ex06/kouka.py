@@ -107,7 +107,7 @@ def main(): # main関数
     global counter,cnt,hoge,bomb_count,speed
     clock = pg.time.Clock()
     scr = Screen("fighting!こうかとん", (1400, 700), "fig/pg_bg.jpg")
-    kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 200))
+    kkt = Bird(f"fig/{cnt}.png", 2.0, (200, 500))
     bgn = int(pg.time.get_ticks())
     clock = pg.time.Clock()
     fonto = pg.font.Font("C:\WINDOWS\FONTS\BIZ-UDMINCHOM.TTC", 80)
@@ -120,11 +120,11 @@ def main(): # main関数
     for i in range(bomb_count):
         bombs[i] = Bomb((ra.randint(0,255),(ra.randint(0,255)),(ra.randint(0,255))), ra.randint(10,25), (+(speed),+(speed)), scr)
     
-    if bomb_count < 7:
-        pg.mixer.music.load("fig/mp3_BGM.mp3")  #ゲームプレイ中常にBGMが流れるようにする(爆弾が七個以下のとき)
+    if bomb_count <= 7:
+        pg.mixer.music.load("fig/mp3_BGM.mp3")                      #ゲームプレイ中常に楽しげなBGMが流れるようにする(爆弾が七個以下のとき)
         pg.mixer.music.play(2)
     else:
-        pg.mixer.music.load("fig/Dear_Sir_Einstein.mp3")  #ゲームプレイ中常にBGMが流れるようにする(爆弾が八個以上のとき)
+        pg.mixer.music.load("fig/Dear_Sir_Einstein.mp3")            #ゲームプレイ中常に殺伐としたBGMが流れるようにする(爆弾が八個以上のとき)
         pg.mixer.music.play(2)
 
     beam = None
@@ -135,10 +135,12 @@ def main(): # main関数
     while True:
         scr.blit()
 
-        sec = int(10-(pg.time.get_ticks()-bgn)/1000)           #秒数の計算
-        if sec == 0:
+        sec = int(10 - (pg.time.get_ticks() - bgn) / 1000)           #秒数の計算
+        if sec == 0:#制限時間が0のときゲームオーバー
+            pg.mixer.music.load("fig/deathse.mp3")
+            pg.mixer.music.play(1)
             Continue()
-        txt = fonto.render(f"制限時間{sec}", True, (255,0,0))   #こうかとんの画像変更
+        txt = fonto.render(f"制限時間{sec}", True, (255,0,0))         #こうかとんの画像変更
         scr.sfc.blit(txt, (200, 100))    
 
         for event in pg.event.get():
@@ -146,10 +148,10 @@ def main(): # main関数
                 hit_music = pg.mixer.Sound("fig/hit.mp3")
                 hit_music.play()
                 return
-                
+            #スペースキーでこうかとんがビームを発射する
             if (event.type == pg.KEYDOWN) and (event.key == pg.K_SPACE):
-                beam = kkt.attack()                                    #スペースキーでこうかとんがビームを発射する
-                beam_music = pg.mixer.Sound("fig/mp3_006.wav")
+                beam = kkt.attack()                                    
+                beam_music = pg.mixer.Sound("fig/mp3_006.wav")#
                 beam_music.play()
 
 
@@ -186,9 +188,9 @@ def main(): # main関数
         pg.display.update()
         clock.tick(1000)
 
-def Continue():
+def Continue():#gameover画面(y/n) yの場合コンティニュー、nの場合ゲームを終了
     global root
-    root = tk.Tk()                                                              #gameover画面(y/n)yの場合コンティニュー、nの場合ゲームを終了
+    root = tk.Tk()
     root.geometry("220x100")
     root.title("GameOver")
     label = tk.Label(root, text="continue?", font = ("Times New Roman", 40))
@@ -200,7 +202,7 @@ def Continue():
     btn2.place(x = 126, y = 60)
     root.mainloop()
 
-def clear():                                                                            #ゲームクリアしたときの処理
+def clear():#ゲームクリアしたときの処理
     global root
     root = tk.Tk()
     root.geometry("400x110")
@@ -212,7 +214,7 @@ def clear():                                                                    
     btn.place(x = 150, y = 65)
     root.mainloop()
 
-def reset():     #鳥のカウントとゲームオーバー画面の非表示　こうかとんの位置リセット　画像チェンジ
+def reset():#鳥のカウントとゲームオーバー画面の非表示　こうかとんの位置リセット　画像チェンジ
     global root,cnt
     cnt += 1
     if cnt == 9:
@@ -221,8 +223,7 @@ def reset():     #鳥のカウントとゲームオーバー画面の非表示�
     pg.init()
     main()
 
-
-def exit():     #終了
+def exit():#終了
     pg.quit()
     sys.exit()
 
